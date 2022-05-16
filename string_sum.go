@@ -35,12 +35,12 @@ func StringSum(input string) (output string, err error) {
 
 	if len(r_slice) > 4 {
 		output = ""
-		err = fmt.Errorf("%w", errorNotTwoOperands)
+		err = errorNotTwoOperands
 	}
 
-	if input == "" {
+	if input == "" || input == " " {
 		output = ""
-		err = fmt.Errorf("%w", errorEmptyInput)
+		err = errorEmptyInput
 	}
 
 	if string(r_slice[0]) == "+" || string(r_slice[0]) == "-" {
