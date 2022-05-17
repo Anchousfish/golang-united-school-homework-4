@@ -27,7 +27,9 @@ var (
 
 func StringSum(input string) (output string, err error) {
 
+	input = strings.Trim(input, "\t\n\v\f\r")
 	input = strings.ReplaceAll(input, " ", "")
+	input = strings.TrimSpace(input)
 
 	if input == "" {
 		return "", fmt.Errorf("%w", errorEmptyInput)
