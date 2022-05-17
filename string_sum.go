@@ -27,34 +27,47 @@ var (
 
 func StringSum(input string) (output string, err error) {
 
-	input = strings.Trim(input, "\t\n\v\f\r")
+	input = strings.ReplaceAll(input, "\t", "")
+	input = strings.ReplaceAll(input, "\v", "")
+	input = strings.ReplaceAll(input, "\r", "")
+	input = strings.ReplaceAll(input, "\f", "")
+	input = strings.ReplaceAll(input, "\n", "")
 	input = strings.ReplaceAll(input, " ", "")
-	input = strings.TrimSpace(input)
 
 	if input == "" {
 		return "", fmt.Errorf("%w", errorEmptyInput)
-	} else {
-		num := strings.Split(input, "+")
+	}
+	num := strings.Split(input, "+")
 
-		if len(num) == 1 || len(num) > 2 {
+	if len(num) > 2 {
+		return "", fmt.Errorf("%w", errorNotTwoOperands)
+	}
+	if len(num) == 1 {
+		neg_ind := strings.LastIndex(input, "-")
+		if neg_ind == -1 {
 			return "", fmt.Errorf("%w", errorNotTwoOperands)
-		} else {
-			x1, err1 := strconv.Atoi(num[0])
-			x2, err2 := strconv.Atoi(num[1])
-			if err1 != nil || err2 != nil {
-				if err1 != nil {
-					err = err1
-				} else {
-					err = err2
-				}
-				return "", fmt.Errorf("%w", err)
-			} else {
-
-				output = strconv.Itoa(x1 + x2)
-				return output, err
-			}
 		}
+		output, err = summ(input[:neg_ind], input[neg_ind:])
+		return output, err
 
 	}
+	output, err = summ(num[0], num[1])
+	return output, err
 
+}
+func summ(j1, j2 string) (out string, e error) {
+	x1, err1 := strconv.Atoi(j1)
+	x2, err2 := strconv.Atoi(j2)
+	if err1 != nil || err2 != nil {
+		if err1 != nil {
+			e = err1
+		} else {
+			e = err2
+		}
+		return "", fmt.Errorf("%w", e)
+	} else {
+
+		out = strconv.Itoa(x1 + x2)
+		return out, e
+	}
 }
